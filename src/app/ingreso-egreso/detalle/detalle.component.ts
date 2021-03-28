@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducer';
+import { IngresoEgreso } from '../../models/ingreso-egreso.model';
+import { Subscription } from 'rxjs';
+import { IngresoEgresoService } from '../../services/ingreso-egreso.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detalle',
@@ -6,11 +12,53 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class DetalleComponent implements OnInit {
+export class DetalleComponent implements OnInit, OnDestroy {
 
-  constructor() { }
+  ingresosEgresos: any[] = [];
+  private subscription: Subscription;
+  constructor(private store: Store<AppState>,
+              private ingresoEgresoService: IngresoEgresoService
+    ) { }
+  
 
   ngOnInit(): void {
+     this.subscription = this.store.select('ingresosEgresos')
+         .subscribe(({ items }) => {
+            this.ingresosEgresos = items;
+         })
+  }
+
+  borrar(uid) {
+    Swal.fire({
+      title: 'Espere por favor',
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    }); 
+    this.ingresoEgresoService.borrarIngresoEgreso(uid)
+        .then(() => {
+          Swal.close();
+          Swal.fire({
+            icon: 'success',
+            title: 'Mensaje del Sistema',
+            text: 'Se ha eliminado correctamente el item',
+            confirmButtonText: 'Aceptar',
+          });
+        })
+        .catch((error) => {
+          Swal.close();
+          const msg = error.message;
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: msg,
+            confirmButtonText: 'Aceptar',
+          });
+        })
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }
