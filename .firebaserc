@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "redux-proyects": {
+      "hosting": {
+        "IngresosEgresosApp": [
+          "redux-proyects"
+        ]
+      }
+    }
+  }
+}

@@ -3,3 +3,19 @@
 .form-control {
     height: 100% !important;
 }
+
+.form-control:focus {
+    box-shadow: none !important
+}
+
+.auth-page {
+    min-height: calc(100vh - 60px) !important;
+}
+
+.swal2-actions {
+    margin: 1.25em auto !important;
+}
+
+.cursor {
+    cursor: pointer;
+}
