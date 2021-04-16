@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     this.uiSubscription = this.store.select('ui').subscribe((ui) => {
-      console.log('Realizando suscripcion en ui');
       this.cargando = ui.isLoading;
     });
   }
@@ -56,14 +55,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         .then ((credentials) => {
          // Swal.close();
           this.store.dispatch(ui.stopLoading());
-          console.log(credentials);
           this.router.navigateByUrl('/')
         })
         .catch (( error) => {
          // Swal.close();
           this.store.dispatch(ui.stopLoading());
           const msg = error.message;
-          console.log(error);
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
